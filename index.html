@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Breast Feeding Log</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script>
+    var side;
+    
+    $(document).ready(function(){
+       
+      //START
+      $(".start").click(function(){
+        side = $(this).attr("id");
+        $("#startDiv").addClass('hide');
+        $("#stopDiv").removeClass('hide');
+        startTimer();
+      });
+      
+      //STOP
+      $(".stop").click(function(){
+        stopTimer();
+        $("#startDiv").removeClass('hide');
+        $("#stopDiv").addClass('hide');
+      });
+    });
+    
+    //Timers
+    var Intervals;
+    var Seconds = 0;
+    var StartTime;
+    var StopTime;
+  
+    function startTimer(){
+      StartTime = new Date().getTime();
+      Intervals = setInterval(function(){
+        var time = Seconds;
+        var msg = "You've Been Feeding on the " + side + " for " + time;
+        $("#msg").html(msg);
+        Seconds+=1;
+      },1000);
+    }
+    
+    function stopTimer(){
+      Seconds = 0;
+      clearInterval(Intervals);
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h2 id="msg">Breast Feeding Log</h2>
+    
+    <!--Start Buttons-->
+    <div class="btn-group btn-group-justified" id="startDiv"> 
+      <a href="#" class="btn btn-lg btn-primary start" id="Left">Start Left</a>
+      <a href="#" class="btn btn-lg btn-primary start" id="Right">Start Right</a>
+    </div>
+    
+    <!--Stop Buttons-->
+    <div class="btn-group btn-group-justified hide" id="stopDiv"> 
+      <a href="#" class="btn btn-lg btn-danger stop" id="stop">Stop</a>
+    </div>
+  </div>
+</body>
+</html>
