@@ -39,7 +39,11 @@
     function startTimer(){
       StartTime = new Date().getTime();
       Intervals = setInterval(function(){
-        var time = Seconds;
+        var time = new Date().getTime();
+        //console.log(current + " : " + StartTime);
+        var ct = time.toString();
+        var st = StartTime.toString(); 
+        time = getTimeDiff(st,ct);
         var msg = "You've Been Feeding on the " + side + " for " + time;
         $("#msg").html(msg);
         Seconds+=1;
@@ -83,6 +87,17 @@
         return local.toJSON().slice(0,10);
     });    
     
+    function getTimeDiff(start, stop){
+//      start = parseInt(start);
+//      stop = parseInt(stop);
+      var diff = (stop-start);
+      var hours = Math.floor( diff / (1000*60*60) );
+      var mins  = Math.floor( diff / (1000*60) );
+      var secs  = Math.floor( diff / 1000 );
+      if(secs<10){secs = "0"+secs};
+      return mins + ":" + secs;
+    }
+    
     function update(){
       $("#logOutput").html("");
       if(log.length > display){
@@ -93,13 +108,14 @@
       for(var i = len;i<log.length;i++){
         var info = log[i].split("|");
         var start = info[0];
-        start = formatAMPM(start);
         var stop = info[1];
+        var minutes = getTimeDiff(start, stop);
+        var time = formatAMPM(start);
         stop = formatAMPM(stop);
         var side = info[2];
         $("#logOutput").append("<tr>"+
-        "<td>"+start+"</td>"+
-        "<td>"+stop+"</td>"+
+        "<td>"+time+"</td>"+
+        "<td>"+minutes+"</td>"+
         "<td>"+side+"</td>"+
         "</tr>");
       }
@@ -126,9 +142,9 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Start</th>
-          <th>Stop</th>
+          <th>Time</th>
           <th>Minutes</th>
+          <th>Side</th>
         </tr>
       </thead>
       <tbody id="logOutput">
