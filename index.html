@@ -11,6 +11,7 @@
     var log = [];
     var display = 20;
     var side;
+    var rmID;
     
     $(document).ready(function(){
        
@@ -27,6 +28,19 @@
         stopTimer();
         $("#startDiv").removeClass('hide');
         $("#stopDiv").addClass('hide');
+      });
+      
+      $("#logOutput").on('click','.remove',function(){
+        $('#removeModal').modal('show');
+        var rmID = $(this).attr("rmid");
+        var time = log[rmID].split("|");
+        time = time[0];
+        time = formatAMPM(time);
+        $("#removeMsg").html(time);
+      });
+      
+      $("#delete").click(function(){
+        removeItem(rmID);  
       });
       
       update();
@@ -57,12 +71,13 @@
       Seconds = 0;
       clearInterval(Intervals);
       $("#msg").html("Breast Feeding Log");
+      
+      log.push(StartTime + "|" + StopTime +"|"+side);  
       saveLog();
       update();
     }
     
     function saveLog(){
-      log.push(StartTime + "|" + StopTime +"|"+side);  
       localStorage["breastLog"] = JSON.stringify(log);
     }
     
@@ -118,7 +133,7 @@
         stop = formatAMPM(stop);
         var side = info[2];
         $("#logOutput").append("<tr>"+
-        "<td>"+time+"</td>"+
+        "<td class='remove' rmid='"+i+"'>"+time+"</td>"+
         "<td>"+minutes+"</td>"+
         "<td>"+side+"</td>"+
         "</tr>");
@@ -131,6 +146,11 @@
       }
     } 
     
+    function removeItem(id){
+      log.splice(id,1);
+      saveLog();
+      update();
+    }
   </script>
 </head>
 <body>
@@ -160,6 +180,35 @@
       <tbody id="logOutput">
       </tbody>
     </table>
+    <hr>
+  <blockquote>
+    <footer>Touch Entry To Remove It</footer>
+  </blockquote>
   </div>
+
+<!-- Modals-->
+<!--Removel Confirm-->
+<div id="removeModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Would you like to remove this entry?</h4>
+      </div>
+      <div class="modal-body">
+        <p id="removeMsg"></p>
+      </div>
+      <div class="modal-footer">
+        <button id="delete" type="button" class="btn btn-danger" data-dismiss="modal">Delete Entry</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
 </body>
 </html>
