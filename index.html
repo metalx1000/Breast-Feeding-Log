@@ -28,6 +28,8 @@
         $("#startDiv").removeClass('hide');
         $("#stopDiv").addClass('hide');
       });
+      
+      update();
     });
     
     //Timers
@@ -61,6 +63,7 @@
     
     function saveLog(){
       log.push(StartTime + "|" + StopTime +"|"+side);  
+      localStorage["breastLog"] = JSON.stringify(log);
     }
     
     //Get Date/Time in 12 Hour AM/PM format
@@ -99,6 +102,7 @@
     }
     
     function update(){
+      getLog();
       $("#logOutput").html("");
       if(log.length > display){
         var len = log.length-display;
@@ -120,6 +124,12 @@
         "</tr>");
       }
     }
+   
+    function getLog(){
+      if (localStorage.breastLog){
+        log = JSON.parse(localStorage["breastLog"]);
+      }
+    } 
     
   </script>
 </head>
