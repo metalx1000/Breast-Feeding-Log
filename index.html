@@ -37,12 +37,12 @@
     var rmID;
     
     $(document).ready(function(){
-       
+      if(localStorage.feedTime && localStorage.side){
+        startTimer();
+      }
       //START
       $(".start").click(function(){
         side = $(this).attr("id");
-        $("#startDiv").addClass('hide');
-        $("#stopDiv").removeClass('hide');
         startTimer();
       });
       
@@ -71,6 +71,9 @@
         update();
       });
       update();
+      if(localStorage.feedTime && localStorage.side){
+        startTimer();
+      }
     });
     
     //Timers
@@ -80,7 +83,17 @@
     var StopTime;
   
     function startTimer(){
-      StartTime = new Date().getTime();
+      if(localStorage.feedTime && localStorage.side){
+        StartTime = localStorage.feedTime;
+        side = localStorage.side;
+      }else{
+        StartTime = new Date().getTime();
+        localStorage.feedTime = StartTime;
+        localStorage.side = side;
+      }
+      $("#startDiv").addClass('hide');
+      $("#stopDiv").removeClass('hide');
+
       Intervals = setInterval(function(){
         var time = new Date().getTime();
         //console.log(current + " : " + StartTime);
@@ -94,6 +107,7 @@
     }
     
     function stopTimer(){
+      
       StopTime = new Date().getTime();
       Seconds = 0;
       clearInterval(Intervals);
@@ -102,6 +116,10 @@
       log.push(StartTime + "|" + StopTime +"|"+side);  
       saveLog();
       update();
+      delete StartTime;
+      delete side;
+      localStorage.removeItem("feedTime");
+      localStorage.removeItem("side");
     }
     
     function saveLog(){
