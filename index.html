@@ -43,6 +43,10 @@
         removeItem(rmID);  
       });
       
+      $("#info").click(function(){
+        display = log.length;
+        update();
+      });
       update();
     });
     
@@ -121,9 +125,13 @@
       $("#logOutput").html("");
       if(log.length > display){
         var len = log.length-display;
+        $("#info").html("Displaying " + display + " of " + log.length);
+        $("#info").append(" <a href='#' id='viewAll'>Click Here To View All</a>")
       }else{
         len = 0;
+        $("#info").html("Viewing " + display + " Entries");
       }
+
       for(var i = len;i<log.length;i++){
         var info = log[i].split("|");
         var start = info[0];
@@ -156,7 +164,7 @@
 <body>
   <div class="container">
     <h2 id="msg">Breast Feeding Log</h2>
-    
+    <h6 id="info"></h6>  
     <!--Start Buttons-->
     <div class="btn-group btn-group-justified" id="startDiv"> 
       <a href="#" class="btn btn-lg btn-primary start" id="Left">Start Left</a>
