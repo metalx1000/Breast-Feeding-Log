@@ -71,9 +71,11 @@
         update();
       });
       update();
-      if(localStorage.feedTime && localStorage.side){
-        startTimer();
-      }
+      setInterval(function(){
+        if(localStorage.feedTime && localStorage.side){
+          startTimer();
+        }
+      },1000);
     });
     
     //Timers
