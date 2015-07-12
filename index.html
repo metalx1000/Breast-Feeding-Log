@@ -87,6 +87,7 @@
         StartTime = localStorage.feedTime;
         side = localStorage.side;
       }else{
+        localStorage.removeItem("stopTimer");
         StartTime = new Date().getTime();
         localStorage.feedTime = StartTime;
         localStorage.side = side;
@@ -95,19 +96,27 @@
       $("#stopDiv").removeClass('hide');
 
       Intervals = setInterval(function(){
-        var time = new Date().getTime();
-        //console.log(current + " : " + StartTime);
-        var ct = time.toString();
-        var st = StartTime.toString(); 
-        time = getTimeDiff(st,ct);
-        var msg = "You've Been Feeding on the " + side + " for " + time;
-        $("#msg").html(msg);
-        Seconds+=1;
+        if(localStorage.stopTimer){
+          clearInterval(Intervals);
+          $("#msg").html("Breast Feeding Log");
+          $("#startDiv").removeClass('hide');
+          $("#stopDiv").addClass('hide');
+          update();
+        }else{
+          var time = new Date().getTime();
+          //console.log(current + " : " + StartTime);
+          var ct = time.toString();
+          var st = StartTime.toString(); 
+          time = getTimeDiff(st,ct);
+          var msg = "You've Been Feeding on the " + side + " for " + time;
+          $("#msg").html(msg);
+          Seconds+=1;
+        }
       },1000);
     }
     
     function stopTimer(){
-      
+      localStorage.stopTimer = true; 
       StopTime = new Date().getTime();
       Seconds = 0;
       clearInterval(Intervals);
