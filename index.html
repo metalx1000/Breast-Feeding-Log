@@ -55,7 +55,7 @@
       
       $("#logOutput").on('click','.remove',function(){
         $('#removeModal').modal('show');
-        var rmID = $(this).attr("rmid");
+        rmID = $(this).attr("rmid");
         var time = log[rmID].split("|");
         time = time[0];
         time = formatAMPM(time);
@@ -212,8 +212,9 @@
       }
     } 
     
-    function removeItem(id){
-      log.splice(id,1);
+    function removeItem(){
+      //console.log(rmID);
+      log.splice(rmID,1);
       saveLog();
       update();
     }
